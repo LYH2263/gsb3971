@@ -1,0 +1,27 @@
+{
+  "id": 3971,
+  "tech_type": "fullstack",
+  "prompt": "1）Java技术 \n\n（2）Vue3、Element-Plus前端框架 \n\n（3）Spring Boot、Spring、SpringMVC、MyBatis、MyBatis-Plus框架技术 \n\n（4）前后端分离数据接口设计 \n\n（5）MySQL数据库， \n\n注册 任何一个具有中国公民资格的人员都可以通过程序进行注册，获取身份。 \n\n注册信息至少包括：手机号码（身份唯一识别）、登录密码、真实姓名（便于联系）、年龄、性别。 \n\n登录 使用注册信息中的手机号码、登录密码进行登录。 \n\n雾屿潮间带研学营 学员档案 铺位管理 设置营房和铺位 \n\n营期配餐 对每个学员进行定制 \n\n配餐日历 每周营期菜单 \n\n入营登记 学员的入营登记 \n\n结营登记 学员结营 \n\n离营外出登记 学员离营外出 \n\n设置带教配对 设置学员与带队导师关系 \n\n研学增值包 学员购买的研学项目 \n\n营务账号 人员 \n\n带教模块 带教档位 定义档位 \n\n辅导内容 设置辅导内容 \n\n辅导记录 辅导项目进行记录 \n\n请完成任务",
+  "framework": "modern_frontend_framework",
+  "backend": "Java Spring Boot",
+  "database": "MySQL",
+  "platform": "",
+  "scores": {
+    "clarity": 4,
+    "complexity": 3.4,
+    "verifiability": 1.8,
+    "manual_verify": 2,
+    "automatable": 2,
+    "total": 3.49,
+    "grade": "B",
+    "reproducibility": 1,
+    "type_weight": 3.25,
+    "weighted_total": 11.34,
+    "complexity_rule": 3.0,
+    "complexity_llm": 4.0,
+    "feasibility": 4,
+    "feasibility_confidence": 0.66
+  },
+  "impl_score": 0,
+  "selection_review": null
+}

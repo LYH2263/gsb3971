@@ -1,0 +1,615 @@
+{
+  "project_name": "neusoft-elderly-care-mvp",
+  "project_name_cn": "雾屿潮间带研学营运营台（MVP）",
+  "description": "面向潮间带生态研学营的基础运营台，提供用户注册登录、学员档案与入营/结营/离营外出登记、营房铺位设置与占用管理、营期配餐周菜单与学员定制、带教档位与辅导记录录入等核心能力，采用 Vue3+Element-Plus 前端与 Spring Boot+MyBatis-Plus 后端，MySQL 持久化，前后端分离通过 REST API 交互。",
+  "target_users": [
+    "研学营管理员（维护用户、营房铺位、基础配置）",
+    "营务前台（学员建档、入营/结营/离营外出登记、铺位分配）",
+    "带队导师（辅导记录填写）",
+    "营养/后勤人员（周菜单维护、学员配餐定制）"
+  ],
+  "tech_stack": {
+    "frontend": "Vue 3 + Vite + Vue Router + Pinia + Element-Plus + Axios",
+    "backend": "Java 17 + Spring Boot 3 + Spring MVC + Spring Security(JWT) + MyBatis-Plus + Hibernate Validator",
+    "database": "MySQL 8.x",
+    "reasoning": "Vue3+Element-Plus 适合快速搭建管理后台；Spring Boot 提供成熟的分层与安全体系；MyBatis-Plus 提升 CRUD 开发效率；JWT 便于前后端分离；MySQL 满足结构化业务数据存储与查询。"
+  },
+  "core_features": [
+    {
+      "module": "账号与营务账号",
+      "features": [
+        "公民用户注册：手机号唯一、密码加密存储、填写姓名/年龄/性别",
+        "手机号+密码登录获取 JWT，并在前端持久化会话",
+        "基础用户列表与启用/停用（管理员）"
+      ],
+      "priority": "P0"
+    },
+    {
+      "module": "客户档案与出入管理",
+      "features": [
+        "客户建档：基本信息、紧急联系人（可选）、备注",
+        "入营登记：设置入营日期、分配铺位、状态变更为“在营”",
+        "结营/离营外出登记：记录日期与原因（简化），状态变更"
+      ],
+      "priority": "P0"
+    },
+    {
+      "module": "营房与铺位管理",
+      "features": [
+        "房间维护：楼层/房间号/类型（可选）",
+        "铺位维护：铺位编号、所属营房、状态（空闲/占用/停用）",
+        "铺位分配校验：同一铺位同一时间仅允许一个在营学员占用"
+      ],
+      "priority": "P0"
+    },
+    {
+      "module": "营期配餐（周菜单与客户定制）",
+      "features": [
+        "配餐日历：维护每周菜单（按周起始日期+周一到周日）",
+        "学员配餐定制：为客户选择餐型/忌口备注/额外要求",
+        "按客户查看本周菜单与其定制信息汇总"
+      ],
+      "priority": "P1"
+    },
+    {
+      "module": "带教辅导（级别与记录）",
+      "features": [
+        "带教档位维护：级别名称与描述（如：一级/二级）",
+        "辅导内容（项目）简化为自由文本记录项",
+        "辅导记录：选择客户、记录日期、辅导内容、执行人"
+      ],
+      "priority": "P1"
+    }
+  ],
+  "pages": [
+    {
+      "path": "/login",
+      "name": "登录/注册",
+      "description": "用户使用手机号注册并登录，获取系统访问权限。",
+      "key_elements": [
+        "登录表单：手机号、密码",
+        "注册表单：手机号、密码、真实姓名、年龄、性别",
+        "表单校验：必填、手机号格式、密码长度",
+        "登录成功跳转与错误提示"
+      ]
+    },
+    {
+      "path": "/customers",
+      "name": "学员档案",
+      "description": "学员建档、入营/结营/离营外出登记与铺位分配的核心操作页面。",
+      "key_elements": [
+        "学员列表：姓名、手机号、状态、铺位、带教档位（可选）、操作",
+        "客户新建/编辑弹窗",
+        "入营登记弹窗：入营日期、选择铺位",
+        "结营/离营外出登记弹窗：日期、原因",
+        "筛选：状态/关键词"
+      ]
+    },
+    {
+      "path": "/rooms",
+      "name": "营房铺位管理",
+      "description": "维护营房与铺位基础数据，并查看铺位占用情况。",
+      "key_elements": [
+        "营房列表：营房号、楼层、铺位数、操作",
+        "铺位列表（按房间展开）：铺位编号、状态当前学员（若占用）",
+        "新增/编辑营房、铺位弹窗",
+        "铺位停用/启用操作"
+      ]
+    },
+    {
+      "path": "/meals",
+      "name": "营期配餐",
+      "description": "维护每周菜单并为学员记录配餐定制信息。",
+      "key_elements": [
+        "周选择器（周起始日期）与周菜单编辑表（周一至周日）",
+        "学员选择与配餐定制表单：餐型/忌口/备注",
+        "保存与查看本周客户定制汇总列表"
+      ]
+    },
+    {
+      "path": "/care",
+      "name": "带教辅导",
+      "description": "维护带教档位并记录学员辅导执行情况。",
+      "key_elements": [
+        "带教档位列表：名称、描述、启用状态",
+        "辅导记录列表：客户、日期、内容、执行人",
+        "新增辅导记录弹窗：客户、日期、内容",
+        "按客户/日期筛选"
+      ]
+    }
+  ],
+  "data_models": [
+    {
+      "name": "User",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "description": "手机号，唯一"
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR(255)",
+          "description": "加密后的登录密码"
+        },
+        {
+          "name": "real_name",
+          "type": "VARCHAR(50)",
+          "description": "真实姓名"
+        },
+        {
+          "name": "age",
+          "type": "INT",
+          "description": "年龄"
+        },
+        {
+          "name": "gender",
+          "type": "TINYINT",
+          "description": "性别：0未知/1男/2女"
+        },
+        {
+          "name": "role",
+          "type": "VARCHAR(20)",
+          "description": "角色：ADMIN/STAFF"
+        },
+        {
+          "name": "status",
+          "type": "TINYINT",
+          "description": "状态：1启用/0停用"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "description": "创建时间"
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(50)",
+          "description": "学员姓名"
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "description": "联系电话（可与注册手机号不同），可选"
+        },
+        {
+          "name": "age",
+          "type": "INT",
+          "description": "年龄"
+        },
+        {
+          "name": "gender",
+          "type": "TINYINT",
+          "description": "性别：0未知/1男/2女"
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "description": "状态：DRAFT/RESIDENT/OUTING/DISCHARGED"
+        },
+        {
+          "name": "bed_id",
+          "type": "BIGINT",
+          "description": "当前铺位ID（在营时必填）"
+        },
+        {
+          "name": "checkin_date",
+          "type": "DATE",
+          "description": "入营日期"
+        },
+        {
+          "name": "note",
+          "type": "VARCHAR(255)",
+          "description": "备注"
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "description": "创建时间"
+        }
+      ]
+    },
+    {
+      "name": "Room",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "floor",
+          "type": "INT",
+          "description": "楼层"
+        },
+        {
+          "name": "room_no",
+          "type": "VARCHAR(20)",
+          "description": "房间号"
+        },
+        {
+          "name": "status",
+          "type": "TINYINT",
+          "description": "状态：1启用/0停用"
+        }
+      ]
+    },
+    {
+      "name": "Bed",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "room_id",
+          "type": "BIGINT",
+          "description": "所属房间ID"
+        },
+        {
+          "name": "bed_no",
+          "type": "VARCHAR(20)",
+          "description": "铺位编号（营房内唯一）"
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "description": "状态：AVAILABLE/OCCUPIED/DISABLED"
+        }
+      ]
+    },
+    {
+      "name": "MealWeeklyMenu",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "week_start_date",
+          "type": "DATE",
+          "description": "周起始日期（建议周一），唯一"
+        },
+        {
+          "name": "mon",
+          "type": "VARCHAR(255)",
+          "description": "周一菜单"
+        },
+        {
+          "name": "tue",
+          "type": "VARCHAR(255)",
+          "description": "周二菜单"
+        },
+        {
+          "name": "wed",
+          "type": "VARCHAR(255)",
+          "description": "周三菜单"
+        },
+        {
+          "name": "thu",
+          "type": "VARCHAR(255)",
+          "description": "周四菜单"
+        },
+        {
+          "name": "fri",
+          "type": "VARCHAR(255)",
+          "description": "周五菜单"
+        },
+        {
+          "name": "sat",
+          "type": "VARCHAR(255)",
+          "description": "周六菜单"
+        },
+        {
+          "name": "sun",
+          "type": "VARCHAR(255)",
+          "description": "周日菜单"
+        },
+        {
+          "name": "updated_at",
+          "type": "DATETIME",
+          "description": "更新时间"
+        }
+      ]
+    },
+    {
+      "name": "CustomerMealPlan",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "customer_id",
+          "type": "BIGINT",
+          "description": "客户ID"
+        },
+        {
+          "name": "week_start_date",
+          "type": "DATE",
+          "description": "对应周起始日期"
+        },
+        {
+          "name": "meal_type",
+          "type": "VARCHAR(20)",
+          "description": "餐型：NORMAL/DIABETIC/LOW_SALT/OTHER"
+        },
+        {
+          "name": "diet_taboo",
+          "type": "VARCHAR(255)",
+          "description": "忌口信息"
+        },
+        {
+          "name": "note",
+          "type": "VARCHAR(255)",
+          "description": "额外备注"
+        },
+        {
+          "name": "created_by",
+          "type": "BIGINT",
+          "description": "创建人用户ID"
+        }
+      ]
+    },
+    {
+      "name": "CareLevel",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(50)",
+          "description": "级别名称"
+        },
+        {
+          "name": "description",
+          "type": "VARCHAR(255)",
+          "description": "级别描述"
+        },
+        {
+          "name": "status",
+          "type": "TINYINT",
+          "description": "状态：1启用/0停用"
+        }
+      ]
+    },
+    {
+      "name": "CareRecord",
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "description": "主键"
+        },
+        {
+          "name": "customer_id",
+          "type": "BIGINT",
+          "description": "客户ID"
+        },
+        {
+          "name": "care_date",
+          "type": "DATETIME",
+          "description": "辅导发生时间"
+        },
+        {
+          "name": "content",
+          "type": "VARCHAR(500)",
+          "description": "辅导内容/项目记录（自由文本）"
+        },
+        {
+          "name": "performed_by",
+          "type": "BIGINT",
+          "description": "执行人用户ID"
+        }
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-CORE-001",
+      "category": "core",
+      "given": "用户在注册页填写合法手机号、密码、姓名、年龄、性别且手机号未被注册",
+      "when": "点击注册提交",
+      "then": "系统创建用户记录并提示注册成功，随后可使用该手机号密码登录获取 JWT"
+    },
+    {
+      "id": "AC-CORE-002",
+      "category": "core",
+      "given": "已登录的工作人员进入学员档案页",
+      "when": "新建学员并执行入营登记选择一个空闲铺位",
+      "then": "学员状态变更为 RESIDENT，铺位状态变更为 OCCUPIED，列表中显示学员与铺位绑定关系"
+    },
+    {
+      "id": "AC-CORE-003",
+      "category": "core",
+      "given": "已登录用户在营期配餐页选择某个周起始日期",
+      "when": "保存该周周一到周日菜单内容",
+      "then": "系统可在同一周选择器下正确加载并展示已保存的周菜单"
+    },
+    {
+      "id": "AC-EDGE-001",
+      "category": "edge",
+      "given": "某铺位已被在营学员占用（OCCUPIED）",
+      "when": "另一学员尝试入营登记选择该铺位",
+      "then": "接口返回冲突错误并提示“铺位已占用”，不产生重复占用数据"
+    },
+    {
+      "id": "AC-ERROR-001",
+      "category": "error",
+      "given": "用户在登录页输入已注册手机号但密码错误",
+      "when": "点击登录",
+      "then": "系统返回认证失败并提示账号或密码错误，不下发 JWT"
+    },
+    {
+      "id": "AC-USABILITY-001",
+      "category": "usability",
+      "given": "用户在注册或新增学员时未填写必填项或手机号格式不正确",
+      "when": "点击提交保存",
+      "then": "前端展示明确的字段级校验提示，且不发起提交或后端返回 400 时可展示可读错误信息"
+    },
+    {
+      "id": "AC-CORE-004",
+      "category": "core",
+      "given": "已登录带队导师在带教辅导页选择一个学员并填写辅导内容与时间",
+      "when": "提交新增辅导记录",
+      "then": "辅导记录保存成功并在列表中按时间倒序可见，显示执行人为当前登录用户"
+    },
+    {
+      "id": "AC-EDGE-002",
+      "category": "edge",
+      "given": "客户当前状态为 DISCHARGED",
+      "when": "用户尝试对该客户发起离营外出登记",
+      "then": "系统拒绝该操作并提示状态不允许（仅 RESIDENT 可外出）"
+    }
+  ],
+  "api_endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "用户注册（手机号唯一），返回用户基础信息",
+      "auth": "none"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "用户登录，成功返回 JWT 与用户信息",
+      "auth": "none"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "description": "用户列表（管理员）",
+      "auth": "required"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/users/{id}/status",
+      "description": "启用/停用用户（管理员）",
+      "auth": "required"
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers",
+      "description": "客户列表查询（可按状态/关键词过滤）",
+      "auth": "required"
+    },
+    {
+      "method": "POST",
+      "path": "/api/customers",
+      "description": "新建客户档案",
+      "auth": "required"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/customers/{id}/lifecycle",
+      "description": "学员入营/结营/离营外出登记（传入动作checkin/discharge/outing与日期、原因、bedId等）",
+      "auth": "required"
+    },
+    {
+      "method": "GET",
+      "path": "/api/rooms",
+      "description": "营房列表（包含铺位摘要信息或可按参数includeBeds=true返回铺位列表）",
+      "auth": "required"
+    },
+    {
+      "method": "POST",
+      "path": "/api/rooms",
+      "description": "新增/编辑房间（MVP 可用同接口通过是否带id区分，或仅新增）",
+      "auth": "required"
+    },
+    {
+      "method": "POST",
+      "path": "/api/rooms/{roomId}/beds",
+      "description": "在指定房间下新增铺位/更新铺位状态（MVP：新增为主，更新可通过payload带bedId与status实现）",
+      "auth": "required"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/meals/weekly-menus/{weekStartDate}",
+      "description": "保存指定周起始日期的周菜单（覆盖式更新）",
+      "auth": "required"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/meals/customer-plans/{customerId}/{weekStartDate}",
+      "description": "保存学员某周的配餐定制信息（覆盖式更新）",
+      "auth": "required"
+    }
+  ],
+  "out_of_scope": [
+    "费用结算/缴费/发票",
+    "家属端小程序/短信通知/电话外呼",
+    "复杂排班、辅导工单流转与审批",
+    "带队导师关系与研学增值包的完整商品化/订单化管理（仅保留未来扩展空间）",
+    "数据分析报表与大屏",
+    "多院区、多租户与细粒度权限体系（仅提供ADMIN/STAFF基础角色）",
+    "文件上传（证件、合同、体检报告等）"
+  ],
+  "implementation_milestones": [
+    {
+      "phase": "Phase 1 - 项目骨架与认证",
+      "tasks": [
+        "前端：Vue3+Element-Plus 工程初始化、路由与登录态（Pinia + localStorage）",
+        "后端：Spring Boot 工程初始化、统一返回体与全局异常处理",
+        "数据库：MySQL 初始化表结构（User 等最小集合）",
+        "实现注册/登录接口：密码BCrypt加密、JWT签发与鉴权拦截",
+        "实现登录/注册页面与表单校验"
+      ],
+      "acceptance": [
+        "可完成注册与登录并获取 JWT",
+        "未登录访问受保护接口返回 401",
+        "前端可保持会话并在刷新后仍可请求受保护接口"
+      ]
+    },
+    {
+      "phase": "Phase 2 - 学员与铺位核心流程",
+      "tasks": [
+        "实现营房与铺位数据模型、CRUD（以房间页管理为主）",
+        "实现客户档案创建与列表查询",
+        "实现入营/结营/离营外出生命周期接口与状态机校验",
+        "实现铺位占用冲突校验与事务处理（入营成功同时更新学员与铺位）",
+        "前端：学员档案页与营房铺位管理页联动选择铺位"
+      ],
+      "acceptance": [
+        "可新增营房与铺位并在页面展示",
+        "可新增学员并完成入营登记，铺位状态正确变更",
+        "占用铺位不可再次分配，返回可读错误提示"
+      ]
+    },
+    {
+      "phase": "Phase 3 - 配餐与带教（运营必需）",
+      "tasks": [
+        "实现周菜单保存/读取（按weekStartDate唯一）",
+        "实现学员配餐定制保存/读取（按customerId+weekStartDate唯一）",
+        "实现带教档位（可选）与辅导记录新增/列表",
+        "前端：营期配餐页（周菜单+客户定制）与带教辅导页（记录列表与新增）"
+      ],
+      "acceptance": [
+        "可维护任意周的周菜单并可再次加载显示",
+        "可为学员保存某周配餐定制信息并在页面查询到",
+        "可新增辅导记录并按时间倒序展示"
+      ]
+    }
+  ]
+}

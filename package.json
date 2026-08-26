@@ -1,0 +1,31 @@
+{
+  "name": "neusoft-elderly-care-mvp",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.26.1",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter frontend dev",
+    "lint": "pnpm run frontend:lint && pnpm run backend:lint",
+    "test": "pnpm run frontend:test && pnpm run backend:test",
+    "build": "pnpm run frontend:build && pnpm run backend:build",
+    "frontend:dev": "pnpm --filter frontend dev",
+    "frontend:lint": "pnpm --filter frontend lint",
+    "frontend:test": "pnpm --filter frontend test",
+    "frontend:build": "pnpm --filter frontend build",
+    "backend:dev": "cd backend && ./mvnw spring-boot:run",
+    "backend:lint": "cd backend && ./mvnw -q -DskipTests checkstyle:check",
+    "backend:test": "cd backend && ./mvnw test",
+    "backend:build": "cd backend && ./mvnw -DskipTests package",
+    "e2e": "pnpm run e2e:full",
+    "e2e:smoke": "playwright test --project=smoke",
+    "e2e:full": "playwright test --project=full",
+    "e2e:all": "playwright test --project=smoke --project=full",
+    "e2e:headed": "playwright test --project=smoke --headed",
+    "e2e:install": "playwright install chromium",
+    "compose:up": "docker compose up --build -d",
+    "compose:down": "docker compose down -v"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}
